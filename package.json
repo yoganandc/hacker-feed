@@ -1,0 +1,29 @@
+{
+  "name": "hacker-feed",
+  "version": "1.0.0",
+  "description": "Web Development Project at Northeastern University",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/yoganandc/hacker-feed.git"
+  },
+  "author": "Yoganand Chandrasekhar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yoganandc/hacker-feed/issues"
+  },
+  "homepage": "https://github.com/yoganandc/hacker-feed#readme",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "express-session": "^1.14.2",
+    "mongoose": "^4.7.1",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "q": "^1.4.1"
+  }
+}
