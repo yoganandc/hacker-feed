@@ -7,7 +7,7 @@ if(!process.env.SESSION_SECRET) {
 }
 
 var mongoose = require("mongoose")
-mongoose.connect("mongodb://" + process.env.MLAB_USERNAME + ":" + process.env.MLAB_PASSWORD + "@ds033106.mlab.com:33106/yoganandc-project")
+mongoose.connect("mongodb://" + process.env.MLAB_USERNAME + ":" + process.env.MLAB_PASSWORD + "@ds129038.mlab.com:29038/yoganandc-project")
 var db = mongoose.connection
 
 db.on("error", console.error.bind(console, "could not connect to mlab"))
