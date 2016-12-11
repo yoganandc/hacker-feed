@@ -6,7 +6,7 @@
         .controller("BestStoriesController", BestStoriesController)
         .controller("NewStoriesController", NewStoriesController)
 
-    function HomeController($location, UserService, $rootScope) {
+    function HomeController($location, UserService) {
         var vm = this
 
         function init() {
@@ -14,7 +14,7 @@
             UserService
                 .loggedIn()
                 .then(function(obj) {
-                    vm.user = obj
+                    vm.user = obj.data
                 }, function(err) {
                     $location.url("/login")
                 })

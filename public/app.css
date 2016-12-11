@@ -93,6 +93,16 @@ a {
     padding-top: 20px;
 }
 
+.message {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.table-friends {
+    margin-top: 20px;
+}
+
 #login-panel {
  background-color: #FFFFFF;
  border-radius: 10px;

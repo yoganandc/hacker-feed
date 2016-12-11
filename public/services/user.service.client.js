@@ -3,7 +3,7 @@
         .module("HackerFeed")
         .factory("UserService", UserService)
 
-    function UserService($http) {
+    function UserService($http, $q) {
 
         function createUser(user) {
             var url = "/api/user"
@@ -39,6 +39,37 @@
             return $http.get("/api/user/loggedin")
         }
 
+        function users(userIds) {
+            var deferred = $q.defer()
+
+            var users = []
+            if(userIds.length > 0) {
+
+                var j = 0
+                for(var i = 0; i < userIds.length; i++) {
+
+                    $http.get("/api/user/" + userIds[i])
+                        .then(function (obj) {
+                            users.push(obj.data)
+
+                            j++
+                            if(j === userIds.length) {
+                                deferred.resolve(users)
+                            }
+
+                        }, function (err) {
+                            deferred.reject(err)
+                        })
+                }
+
+            }
+            else {
+                deferred.resolve(users)
+            }
+
+            return deferred.promise
+        }
+
         return {
             loggedIn: loggedIn,
             createUser: createUser,
@@ -46,7 +77,8 @@
             findUserByCredentials: findUserByCredentials,
             updateUser: updateUser,
             deleteUser: deleteUser,
-            logout: logout
+            logout: logout,
+            users: users
         }
 
     }

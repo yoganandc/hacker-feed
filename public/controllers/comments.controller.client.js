@@ -3,24 +3,35 @@
         .module("HackerFeed")
         .controller("CommentController", CommentController)
 
-    function CommentController($location, $routeParams, $sce, HackerNewsService) {
+    function CommentController($location, $routeParams, $sce, HackerNewsService, UserService) {
         var vm = this
         var id = parseInt($routeParams.id, 10)
         vm.trustAsHtml = trustAsHtml
 
         function init() {
-            if(isNaN(id)) {
-                $location.url("/home")
-            }
 
-            HackerNewsService
-                .comments(id)
+            UserService
+                .loggedIn()
                 .then(function(obj) {
-                    processComments(obj.comments, 0)
-                    vm.comments = obj.comments
-                    vm.item = obj.item
-                }, function (err) {
-                    $location.url("/home")
+                    vm.user = obj.data
+
+                    if(isNaN(id)) {
+                        $location.url("/home")
+                    }
+                    else {
+                        HackerNewsService
+                            .comments(id)
+                            .then(function(obj) {
+                                processComments(obj.comments, 0)
+                                vm.comments = obj.comments
+                                vm.item = obj.item
+                            }, function (err) {
+                                $location.url("/home")
+                            })
+                    }
+
+                }, function(err) {
+                    $location.url("/login")
                 })
         }
 

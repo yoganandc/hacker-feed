@@ -25,7 +25,7 @@
                                 items.push(obj.data)
 
                                 j++
-                                if(j === itemIds.length - 1 || j === MAX_COUNT - 1) {
+                                if(j === itemIds.length || j === MAX_COUNT) {
                                     deferred.resolve(items)
                                 }
 
@@ -60,7 +60,7 @@
                                 items.push(obj.data)
 
                                 j++
-                                if(j === itemIds.length - 1 || j === MAX_COUNT - 1) {
+                                if(j === itemIds.length || j === MAX_COUNT) {
                                     deferred.resolve(items)
                                 }
 
@@ -94,7 +94,7 @@
                                 items.push(obj.data)
 
                                 j++
-                                if(j === itemIds.length - 1 || j === MAX_COUNT - 1) {
+                                if(j === itemIds.length || j === MAX_COUNT) {
                                     deferred.resolve(items)
                                 }
 
@@ -135,7 +135,6 @@
                     if (typeof obj.kids !== "undefined" && obj.kids.length > 0) {
                         populateComments(obj.kids, comments)
                             .then(function (obj2) {
-                                console.log(comments)
                                 deferred.resolve({item: obj, comments: comments})
                             }, function (err) {
                                 deferred.reject(err)
