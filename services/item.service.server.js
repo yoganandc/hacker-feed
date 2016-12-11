@@ -1,4 +1,4 @@
-module.exports = function(app, ItemModel, utils) {
+module.exports = function(app, ItemModel, utils, ObjectId) {
     app.post("/api/user/:uid/item", createItem)
     app.get("/api/user/:uid/item/:id", findItemById)
     app.get("/api/user/:uid/item", findItemsByUserId)
@@ -9,12 +9,18 @@ module.exports = function(app, ItemModel, utils) {
 
         var userId = req.params.uid
 
+        if (!utils.validate(userId)) {
+            res.status(400).send({message: "No user with given ID found"})
+            return
+        }
+        userId = new ObjectId(userId.toString().toLowerCase())
+
         if(!req.isAuthenticated()) {
             res.status(401).send()
             return
         }
 
-        if(req.user._id !== userId) {
+        if(!req.user._id.equals(userId)) {
             res.status(403).send()
             return
         }
@@ -24,7 +30,13 @@ module.exports = function(app, ItemModel, utils) {
         if(req.query.share) {
             var friendId = req.query.share
 
-            if(req.user.friends.indexOf(friendId) === -1) {
+            if (!utils.validate(friendId)) {
+                res.status(400).send({message: "No user with given ID found"})
+                return
+            }
+            friendId = new ObjectId(friendId.toString().toLowerCase())
+
+            if(!utils.containsId(req.user.friends, friendId)) {
                 res.status(400).send({message: "No friend with given ID found"})
             }
             else {
@@ -61,13 +73,14 @@ module.exports = function(app, ItemModel, utils) {
             res.status(400).send({message: "No item with given ID found"})
             return
         }
+        userId = new ObjectId(userId.toString().toLowerCase())
 
         if(!req.isAuthenticated()) {
             res.status(401).send()
             return
         }
 
-        if(req.user._id !== userId && req.user.friends.indexOf(userId) === -1) {
+        if(!req.user._id.equals(userId) && !utils.containsId(req.user.friends, userId)) {
             res.status(400).send("No item with given ID found")
             return
         }
@@ -98,13 +111,14 @@ module.exports = function(app, ItemModel, utils) {
             res.status(400).send({message: "No user with given ID found"})
             return
         }
+        userId = new ObjectId(userId.toString().toLowerCase())
 
         if(!req.isAuthenticated()) {
             res.status(401).send()
             return
         }
 
-        if(req.user._id !== userId && req.user.friends.indexOf(userId) === -1) {
+        if(!req.user._id.equals(userId) && !utils.containsId(req.user.friends, userId)) {
             res.status(400).send("No user with given ID found")
             return
         }
@@ -128,13 +142,14 @@ module.exports = function(app, ItemModel, utils) {
             res.status(400).send({message: "No user with given ID found"})
             return
         }
+        userId = new ObjectId(userId.toString().toLowerCase())
 
         if(!req.isAuthenticated()) {
             res.status(401).send()
             return
         }
 
-        if(req.user._id != userId) {
+        if(!req.user._id.equals(userId)) {
             res.status(403).send()
             return
         }

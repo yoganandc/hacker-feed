@@ -20,6 +20,11 @@
                 controller: "ProfileController",
                 controllerAs: "model"
             })
+            .when("/friends", {
+                templateUrl: "/views/friends.view.client.html",
+                controller: "FriendController",
+                controllerAs: "model"
+            })
             .when("/logout", {
                 template: " ",
                 controller: "LogoutController"

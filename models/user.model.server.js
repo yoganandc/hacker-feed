@@ -7,7 +7,7 @@ module.exports = function (model, utils, q) {
             .create(user, function (err, res) {
 
                 if (err) {
-                    if(err.name === "MongoError") {
+                    if (err.name === "MongoError") {
                         deferred.reject("Username already taken")
                     }
                     else {
@@ -31,7 +31,7 @@ module.exports = function (model, utils, q) {
             if (err) {
                 deferred.reject(err)
             }
-            else if(!res) {
+            else if (!res) {
                 deferred.reject("No user with given ID found")
             }
             else {
@@ -53,7 +53,7 @@ module.exports = function (model, utils, q) {
                 if (err) {
                     deferred.reject(err)
                 }
-                else if(!res) {
+                else if (!res) {
                     deferred.reject("No user with given username found")
                 }
                 else {
@@ -107,44 +107,44 @@ module.exports = function (model, utils, q) {
     function friendRequest(userId, friendId) {
         var deferred = q.defer()
 
-        model.findById(userId, function(err, res) {
-            if(err) {
+        model.findById(userId, function (err, res) {
+            if (err) {
                 deferred.reject(err)
             }
-            else if(!res) {
+            else if (!res) {
                 deferred.reject("User with given ID not found")
             }
             else {
 
-                if(res.approvals.indexOf(friendId) !== -1) {
-                    deferred.reject("Friend request already sent")
-                }
-                else if(res.friends.indexOf(friendId) !== -1) {
+                if (res.friends.indexOf(friendId) !== -1) {
                     deferred.reject("Already in friends list")
                 }
-                else if(res.requests.indexOf(friendId) !== -1) {
+                else if (res.approvals.indexOf(friendId) !== -1) {
+                    deferred.reject("Friend request already sent")
+                }
+                else if (res.requests.indexOf(friendId) !== -1) {
                     deferred.reject("This person has sent you a friend request")
                 }
                 else {
-                    model.findById(friendId, function(err, res2) {
-                        if(err) {
+                    model.findById(friendId, function (err, res2) {
+                        if (err) {
                             deferred.reject(err)
                         }
-                        else if(!res2) {
+                        else if (!res2) {
                             deferred.reject("Friend with given ID not found")
                         }
                         else {
 
                             res2.requests.push(userId)
-                            res2.save(function(err) {
-                                if(err) {
+                            res2.save(function (err) {
+                                if (err) {
                                     deferred.reject(err)
                                 }
                                 else {
 
                                     res.approvals.push(friendId)
-                                    res.save(function(err) {
-                                        if(err) {
+                                    res.save(function (err) {
+                                        if (err) {
                                             deferred.reject(err)
                                         }
                                         else {
@@ -168,47 +168,47 @@ module.exports = function (model, utils, q) {
     function friendApprove(userId, friendId) {
         var deferred = q.defer()
 
-        model.findById(userId, function(err, res) {
-            if(err) {
+        model.findById(userId, function (err, res) {
+            if (err) {
                 deferred.reject(err)
             }
-            else if(!res) {
+            else if (!res) {
                 deferred.reject("User with given ID not found")
             }
             else {
 
-                if(res.requests.indexOf(friendId) === -1) {
-                    deferred.reject("This person did not send you a friend request")
-                }
-                else if(res.friends.indexOf(friendId) !== -1) {
+                if (res.friends.indexOf(friendId) !== -1) {
                     deferred.reject("Already in friends list")
                 }
-                else if(res.approvals.indexOf(friendId) !== -1) {
+                else if (res.requests.indexOf(friendId) === -1) {
+                    deferred.reject("This person did not send you a friend request")
+                }
+                else if (res.approvals.indexOf(friendId) !== -1) {
                     deferred.reject("You sent this person a friend request")
                 }
                 else {
 
-                    model.findById(friendId, function(err, res2) {
-                        if(err) {
+                    model.findById(friendId, function (err, res2) {
+                        if (err) {
                             deferred.reject(err)
                         }
-                        else if(!res) {
+                        else if (!res) {
                             deferred.reject("Friend with given ID not found")
                         }
                         else {
 
                             res2.approvals.splice(res2.approvals.indexOf(userId), 1)
                             res2.friends.push(userId)
-                            res2.save(function(err) {
-                                if(err) {
+                            res2.save(function (err) {
+                                if (err) {
                                     deferred.reject(err)
                                 }
                                 else {
 
                                     res.requests.splice(res.requests.indexOf(friendId), 1)
                                     res.friends.push(friendId)
-                                    res.save(function(err) {
-                                        if(err) {
+                                    res.save(function (err) {
+                                        if (err) {
                                             deferred.reject(err)
                                         }
                                         else {

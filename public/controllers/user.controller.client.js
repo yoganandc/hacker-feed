@@ -111,15 +111,37 @@
         vm.deleteUser = deleteUser
 
         function init() {
-
+            UserService
+                .loggedIn()
+                .then(function(obj) {
+                    vm.user = obj.data
+                }, function(err) {
+                    $location.url("/login")
+                })
         }
 
         function updateUser() {
+            delete vm.error
 
+            UserService
+                .updateUser(vm.user._id, vm.user)
+                .then(function(obj) {
+                    vm.user = obj.data
+                }, function(err) {
+                    vm.error = err.data.message
+                })
         }
 
         function deleteUser() {
+            delete vm.error
 
+            UserService
+                .deleteUser(vm.user._id)
+                .then(function(obj) {
+                    $location.url("/login")
+                }, function(err) {
+                    vm.error = err.data.message
+                })
         }
 
         init()

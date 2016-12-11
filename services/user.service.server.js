@@ -1,7 +1,7 @@
 var LocalStrategy = require("passport-local")
 var bcrypt = require("bcrypt-nodejs")
 
-module.exports = function (app, passport, UserModel, utils) {
+module.exports = function (app, passport, UserModel, utils, ObjectId) {
 
     passport.serializeUser(function(user, done) {
         done(null, user._id)
@@ -81,11 +81,6 @@ module.exports = function (app, passport, UserModel, utils) {
     function createUser(req, res) {
         console.log("POST /api/user")
 
-        if (req.isAuthenticated()) {
-            res.status(403).send()
-            return
-        }
-
         var user = req.body
 
         if(typeof user.password !== "undefined") {
@@ -117,6 +112,7 @@ module.exports = function (app, passport, UserModel, utils) {
             res.status(400).send({message: "No user with given ID found"})
             return
         }
+        userId = new ObjectId(userId.toString().toLowerCase())
 
         if(!req.isAuthenticated()) {
             res.status(401).send()
@@ -126,11 +122,11 @@ module.exports = function (app, passport, UserModel, utils) {
         UserModel
             .findUserById(userId)
             .then(function (obj) {
-                if(req.user._id !== userId && req.user.friends.indexOf(userId) === -1) {
+                if(!req.user._id.equals(userId) && !utils.containsId(req.user.friends, userId)) {
                     delete obj.friends
                     delete obj.approvals
                     delete obj.requests
-                    delete obj.friends
+                    delete obj.items
                     res.status(200).send(obj)
                 }
                 else {
@@ -151,13 +147,14 @@ module.exports = function (app, passport, UserModel, utils) {
             res.status(400).send({message: "No user with given ID found"})
             return
         }
+        userId = new ObjectId(userId.toString().toLowerCase())
 
         if(!req.isAuthenticated()) {
             res.status(401).send()
             return
         }
 
-        if(req.user._id !== userId) {
+        if(!req.user._id.equals(userId)) {
             res.status(403).send()
             return
         }
@@ -183,13 +180,14 @@ module.exports = function (app, passport, UserModel, utils) {
             res.status(400).send({message: "No user with given ID found"})
             return
         }
+        userId = new ObjectId(userId.toString().toLowerCase())
 
         if(!req.isAuthenticated()) {
             res.status(401).send()
             return
         }
 
-        if(req.user._id !== userId) {
+        if(!req.user._id.equals(userId)) {
             res.status(403).send()
             return
         }
@@ -213,13 +211,14 @@ module.exports = function (app, passport, UserModel, utils) {
             res.status(400).send({message: "No user with given ID found"})
             return
         }
+        userId = new ObjectId(userId.toString().toLowerCase())
 
         if(!req.isAuthenticated()) {
             res.status(401).send()
             return
         }
 
-        if(req.user._id !== userId) {
+        if(!req.user._id.equals(userId)) {
             res.status(403).send()
             return
         }
@@ -242,7 +241,7 @@ module.exports = function (app, passport, UserModel, utils) {
     }
 
     function friendApprove(req, res) {
-        console.log("PUT /api/user/:uid/requesr/:fid")
+        console.log("PUT /api/user/:uid/request/:fid")
 
         var userId = req.params.uid
 
@@ -250,13 +249,14 @@ module.exports = function (app, passport, UserModel, utils) {
             res.status(400).send({message: "No user with given ID found"})
             return
         }
+        userId = new ObjectId(userId.toString().toLowerCase())
 
         if(!req.isAuthenticated()) {
             res.status(401).send()
             return
         }
 
-        if(req.user._id !== userId) {
+        if(!req.user._id.equals(userId)) {
             res.status(403).send()
             return
         }

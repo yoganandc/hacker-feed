@@ -1,5 +1,7 @@
 module.exports = function(app, mongoose, passport) {
-    var utils = require("./utils.js")(mongoose)
+    var ObjectId = mongoose.Types.ObjectId
+
+    var utils = require("./utils.js")(ObjectId)
     var q = require("q")
 
     var UserSchema = require("./schemas/user.schema.server.js")(mongoose, utils)
@@ -11,6 +13,6 @@ module.exports = function(app, mongoose, passport) {
     var UserModel = require("./models/user.model.server.js")(UserMongooseModel, utils, q)
     var ItemModel = require("./models/item.model.server.js")(ItemMongooseModel, UserMongooseModel, utils, q)
 
-    require("./services/user.service.server.js")(app, passport, UserModel, utils)
-    require("./services/item.service.server.js")(app, ItemModel, utils)
+    require("./services/user.service.server.js")(app, passport, UserModel, utils, ObjectId)
+    require("./services/item.service.server.js")(app, ItemModel, utils, ObjectId)
 }

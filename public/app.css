@@ -89,6 +89,10 @@ a {
     background-color: #27A967;
 }
 
+.last-group {
+    padding-top: 20px;
+}
+
 #login-panel {
  background-color: #FFFFFF;
  border-radius: 10px;

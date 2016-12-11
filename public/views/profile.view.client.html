@@ -1,0 +1,59 @@
+<div>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#/home">
+                    <i class="fa fa-hacker-news fa-lg"></i>HackerFeed
+                </a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#/friends">Friends</a></li>
+                    <li><a href="#/logout">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div id="login-panel" class="col-xs-12 col-sm-4 col-sm-offset-4">
+                <h2>Profile</h2>
+
+                <div ng-show="model.error" class="alert alert-danger">
+                    {{model.error}}
+                </div>
+
+                <form>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input id="username" type="text" class="form-control" ng-model="model.user.username" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input id="firstName" type="text" class="form-control" ng-model="model.user.firstName">
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input id="lastName" type="text" class="form-control" ng-model="model.user.lastName">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input id="email" type="text" class="form-control" ng-model="model.user.email"
+                    </div>
+                    <div class="form-group last-group">
+                        <a class="btn btn-primary btn-block" ng-click="model.updateUser()">Update</a>
+                        <a class="btn btn-danger btn-block" ng-click="model.deleteUser()">Delete Account</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

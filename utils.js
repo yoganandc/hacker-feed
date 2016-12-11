@@ -1,6 +1,6 @@
-module.exports = function(mongoose) {
+module.exports = function(ObjectId) {
+
     var validate = function(id) {
-        var ObjectId = mongoose.Types.ObjectId
         id = id.toString().toLowerCase()
 
         if(!ObjectId.isValid(id)) {
@@ -9,6 +9,16 @@ module.exports = function(mongoose) {
 
         var obj = new ObjectId(id)
         return obj.toString() === id;
+    }
+
+    var containsId = function(arr, id) {
+        for(var i = 0; i < arr.length; i++) {
+            if(arr[i].equals(id)) {
+                return true
+            }
+        }
+
+        return false
     }
 
     var extractErrorMessage = function(err) {
@@ -29,6 +39,7 @@ module.exports = function(mongoose) {
     return {
         validate: validate,
         extractErrorMessage: extractErrorMessage,
-        copy: copy
+        copy: copy,
+        containsId: containsId
     }
 }
