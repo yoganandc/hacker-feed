@@ -1,0 +1,45 @@
+<div>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#/home">
+                    <i class="fa fa-hacker-news fa-lg"></i>HackerFeed
+                </a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Profile</a></li>
+                    <li><a href="#">Friends</a></li>
+                    <li><a href="#">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-8 col-sm-offset-2">
+                <div id="comments-panel" class="panel panel-default">
+                    <div id="comments-panel-heading" class="panel-heading">
+                        <a class="action-link" href="#/home"><i class="fa fa-chevron-left fa-pull-left action action-comments"></i></a>
+                        <a class="action-link" href="#"><i class="fa fa-share-alt fa-lg fa-pull-right action action-comments"></i></a>
+                        <a class="action-link" href="#"><i class="fa fa-floppy-o fa-lg fa-pull-right action action-comments"></i></a>
+                        <a class="action-link" target="_blank" href="{{model.item.url}}"><h3 class="panel-title">{{model.item.title}}</h3></a>
+                    </div>
+                    <div class="panel-body">
+                        <div ng-repeat="comment in model.comments">
+                            <div ng-include="'views/include/comment.view.client.html'"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

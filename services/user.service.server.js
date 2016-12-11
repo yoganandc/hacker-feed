@@ -33,7 +33,7 @@ module.exports = function (app, passport, UserModel, utils) {
                     }
                 })
                 .catch(function(err) {
-                    return done(null, false, {message: extractErrorMessage(err)})
+                    return done(null, false, {message: utils.extractErrorMessage(err)})
                 })
         }
     ))
@@ -49,10 +49,13 @@ module.exports = function (app, passport, UserModel, utils) {
         console.log("POST /api/user/logout")
 
         if(req.isAuthenticated()) {
-            req.logout()
+            req.session.destroy(function(err) {
+                res.status(204).send()
+            })
         }
-        res.status(204).send()
-        return
+        else {
+            res.status(204).send()
+        }
     })
 
     app.get("/api/user/loggedin", function(req, res) {
@@ -71,10 +74,17 @@ module.exports = function (app, passport, UserModel, utils) {
     app.post("/api/user", createUser)
     app.get("/api/user/:uid", findUserById)
     app.put("/api/user/:uid", updateUser)
+    app.put("/api/user/:uid/request/:fid", friendRequest)
+    app.put("/api/user/:uid/approve/:fid", friendApprove)
     app.delete("/api/user/:uid", deleteUser)
 
     function createUser(req, res) {
         console.log("POST /api/user")
+
+        if (req.isAuthenticated()) {
+            res.status(403).send()
+            return
+        }
 
         var user = req.body
 
@@ -82,6 +92,7 @@ module.exports = function (app, passport, UserModel, utils) {
             user.password = bcrypt.hashSync(user.password)
         }
 
+        user.type = "STANDARD"
         UserModel
             .createUser(user)
             .then(function (obj) {
@@ -89,7 +100,7 @@ module.exports = function (app, passport, UserModel, utils) {
                     if(err) {
                         res.status(400).send({message: "Unable to login"})
                     }
-                    res.status(200).send(req.user)
+                    res.status(201).send(req.user)
                 })
             })
             .catch(function (err) {
@@ -102,7 +113,7 @@ module.exports = function (app, passport, UserModel, utils) {
 
         var userId = req.params.uid
 
-        if (!validate(userId)) {
+        if (!utils.validate(userId)) {
             res.status(400).send({message: "No user with given ID found"})
             return
         }
@@ -115,7 +126,16 @@ module.exports = function (app, passport, UserModel, utils) {
         UserModel
             .findUserById(userId)
             .then(function (obj) {
-                res.status(200).send(obj)
+                if(req.user._id !== userId && req.user.friends.indexOf(userId) === -1) {
+                    delete obj.friends
+                    delete obj.approvals
+                    delete obj.requests
+                    delete obj.friends
+                    res.status(200).send(obj)
+                }
+                else {
+                    res.status(200).send(obj)
+                }
             })
             .catch(function (err) {
                 res.status(400).send({message: utils.extractErrorMessage(err)})
@@ -127,7 +147,7 @@ module.exports = function (app, passport, UserModel, utils) {
 
         var userId = req.params.uid
 
-        if (!validate(userId)) {
+        if (!utils.validate(userId)) {
             res.status(400).send({message: "No user with given ID found"})
             return
         }
@@ -137,7 +157,7 @@ module.exports = function (app, passport, UserModel, utils) {
             return
         }
 
-        if(req.user._id != userId) {
+        if(req.user._id !== userId) {
             res.status(403).send()
             return
         }
@@ -159,7 +179,7 @@ module.exports = function (app, passport, UserModel, utils) {
 
         var userId = req.params.uid
 
-        if (!validate(userId)) {
+        if (!utils.validate(userId)) {
             res.status(400).send({message: "No user with given ID found"})
             return
         }
@@ -169,7 +189,7 @@ module.exports = function (app, passport, UserModel, utils) {
             return
         }
 
-        if(req.user._id != userId) {
+        if(req.user._id !== userId) {
             res.status(403).send()
             return
         }
@@ -180,6 +200,80 @@ module.exports = function (app, passport, UserModel, utils) {
                 res.status(204).send()
             })
             .catch(function (err) {
+                res.status(400).send({message: utils.extractErrorMessage(err)})
+            })
+    }
+
+    function friendRequest(req, res) {
+        console.log("PUT /api/user/:uid/request/:fid")
+
+        var userId = req.params.uid
+
+        if (!utils.validate(userId)) {
+            res.status(400).send({message: "No user with given ID found"})
+            return
+        }
+
+        if(!req.isAuthenticated()) {
+            res.status(401).send()
+            return
+        }
+
+        if(req.user._id !== userId) {
+            res.status(403).send()
+            return
+        }
+
+        var friendId = req.params.fid
+
+        if (!utils.validate(friendId)) {
+            res.status(400).send({message: "No user with given ID found"})
+            return
+        }
+
+        UserModel
+            .friendRequest(userId, friendId)
+            .then(function(obj) {
+                res.status(204).send()
+            })
+            .catch(function(err) {
+                res.status(400).send({message: utils.extractErrorMessage(err)})
+            })
+    }
+
+    function friendApprove(req, res) {
+        console.log("PUT /api/user/:uid/requesr/:fid")
+
+        var userId = req.params.uid
+
+        if (!utils.validate(userId)) {
+            res.status(400).send({message: "No user with given ID found"})
+            return
+        }
+
+        if(!req.isAuthenticated()) {
+            res.status(401).send()
+            return
+        }
+
+        if(req.user._id !== userId) {
+            res.status(403).send()
+            return
+        }
+
+        var friendId = req.params.fid
+
+        if (!utils.validate(friendId)) {
+            res.status(400).send({message: "No user with given ID found"})
+            return
+        }
+
+        UserModel
+            .friendApprove(userId, friendId)
+            .then(function(obj) {
+                res.status(204).send()
+            })
+            .catch(function(err) {
                 res.status(400).send({message: utils.extractErrorMessage(err)})
             })
     }

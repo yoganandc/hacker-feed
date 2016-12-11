@@ -22,7 +22,7 @@ db.once("open", function() {
     app.use(bodyParser.urlencoded({extended: true}))
 
     var session = require("express-session")
-    app.use(session({secret: process.env.SESSION_SECRET}))
+    app.use(session({secret: process.env.SESSION_SECRET, saveUninitialized: false, resave: false}))
 
     var passport = require("passport")
     app.use(passport.initialize())
@@ -37,6 +37,7 @@ db.once("open", function() {
     // use this error handler for all errors that
     // have not been caught up to this point
     app.use(function (err, req, res, next) {
+        console.log(err)
         res.status(400).send({message: "Error"})
     })
 

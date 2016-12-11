@@ -1,4 +1,4 @@
 (function() {
     angular
-        .module("HackerFeed", ["ngRoute"])
+        .module("HackerFeed", ["ngRoute", "ngSanitize"])
 })()

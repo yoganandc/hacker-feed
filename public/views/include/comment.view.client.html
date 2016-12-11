@@ -1,0 +1,13 @@
+<div ng-if="comment.depth === 0" class="panel">
+    <div ng-bind-html="model.trustAsHtml(comment.text)"></div>
+    <div ng-repeat="comment in comment.comments">
+        <div ng-include="'views/include/comment.view.client.html'"></div>
+    </div>
+</div>
+
+<div ng-if="comment.depth !== 0" class="col-xs-offset-1 col-sm-offset-1 panel">
+    <div ng-bind-html="model.trustAsHtml(comment.text)"></div>
+    <div ng-repeat="comment in comment.comments">
+        <div ng-include="'views/include/comment.view.client.html'"></div>
+    </div>
+</div>

@@ -5,9 +5,12 @@ module.exports = function(app, mongoose, passport) {
     var UserSchema = require("./schemas/user.schema.server.js")(mongoose, utils)
     var ItemSchema = require("./schemas/item.schema.server.js")(mongoose, utils)
 
-    var UserModel = require("./models/user.model.server.js")(UserSchema, utils, q)
-    var ItemModel = require("./models/item.model.server")(ItemSchema, utils, q)
+    var UserMongooseModel = mongoose.model("User", UserSchema)
+    var ItemMongooseModel = mongoose.model("Item", ItemSchema)
+
+    var UserModel = require("./models/user.model.server.js")(UserMongooseModel, utils, q)
+    var ItemModel = require("./models/item.model.server.js")(ItemMongooseModel, UserMongooseModel, utils, q)
 
     require("./services/user.service.server.js")(app, passport, UserModel, utils)
-    require("./services/item.service.server.js")(app, passport, ItemModel, utils)
+    require("./services/item.service.server.js")(app, ItemModel, utils)
 }

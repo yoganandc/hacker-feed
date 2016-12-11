@@ -1,0 +1,49 @@
+<div>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">
+                    <i class="fa fa-hacker-news fa-lg"></i>HackerFeed
+                </a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#/register">Register</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div id="login-panel" class="col-xs-12 col-sm-4 col-sm-offset-4">
+                <h2>Login</h2>
+
+                <div ng-show="model.error" class="alert alert-danger">
+                    {{model.error}}
+                </div>
+
+                <form>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" id="username" ng-model="model.username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" ng-model="model.password">
+                    </div>
+                    <div class="form-group">
+                        <a class="btn btn-primary btn-block" ng-click="model.login()">Login</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+<div ng-controller="NewStoriesController as child3">
+    <div class="list-panel">
+        <div ng-repeat="item in child3.items">
+            <div class="panel">
+
+                <div class="row">
+                    <div class="col-xs-8 col-sm-8">
+                        <a target="_blank" href="{{item.url}}">{{item.title}}</a>
+                    </div>
+                    <div class="col-xs-4 col-sm-4">
+                        <i class="fa fa-share-alt fa-pull-right action"></i>
+                        <i class="fa fa-floppy-o fa-pull-right action"></i>
+                        <a class="action-link" href="#/comments/{{item.id}}"><i class="fa fa-comments fa-pull-right action"></i></a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

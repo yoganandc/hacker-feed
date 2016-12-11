@@ -23,35 +23,50 @@
           integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
           crossorigin="anonymous">
 
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="https://maxcdn.bootstrapcdn.com/css/ie10-viewport-bug-workaround.css"
-          rel="stylesheet">
-
     <!-- Font Awesome -->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
           rel="stylesheet">
 
     <link href="app.css" rel="stylesheet">
 
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="https://maxcdn.bootstrapcdn.com/css/ie10-viewport-bug-workaround.css"
+          rel="stylesheet">
+
 </head>
 <body>
 
 <div ng-view></div>
-
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="https://maxcdn.bootstrapcdn.com/js/ie10-viewport-bug-workaround.js"></script>
 
 <!-- jQuery 3.0 -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <!-- jQuery UI -->
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
 <!-- Angular JS -->
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
 <!-- Angular Route -->
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-route.js"></script>
+<!-- Angular Sanitize -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-sanitize.js"></script>
 
 <script src="app.js"></script>
 <script src="config.js"></script>
+<!--<script src="directives/embed-responsive-full.directive.client.js"></script>-->
+<script src="services/user.service.client.js"></script>
+<script src="services/hacker-news.service.client.js"></script>
+<script src="controllers/user.controller.client.js"></script>
+<script src="controllers/home.controller.client.js"></script>
+<script src="controllers/comments.controller.client.js"></script>
+<!--<script src="controllers/item.controller.client.js"></script>-->
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="https://maxcdn.bootstrapcdn.com/js/ie10-viewport-bug-workaround.js"></script>
+
 </body>
 </html>
