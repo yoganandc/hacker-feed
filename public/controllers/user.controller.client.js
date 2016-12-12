@@ -147,9 +147,11 @@
         init()
     }
 
-    function LogoutController($location, UserService) {
+    function LogoutController($location, $rootScope, UserService) {
 
         function init() {
+            delete $rootScope.boardItems
+
             UserService
                 .logout()
                 .then(function (obj) {

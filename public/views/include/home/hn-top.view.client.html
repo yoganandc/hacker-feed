@@ -1,4 +1,5 @@
 <div ng-controller="TopStoriesController as child1">
+
     <div class="list-panel">
         <div ng-repeat="item in child1.items">
             <div class="panel">
@@ -9,7 +10,7 @@
                     </div>
                     <div class="col-xs-4 col-sm-4">
                         <a class="action-link" href="#"><i class="fa fa-share-alt fa-pull-right action"></i></a>
-                        <a class="action-link" href="#"><i class="fa fa-floppy-o fa-pull-right action"></i></a>
+                        <a class="action-link" href ng-click="model.saveItem(item.id)"><i class="fa fa-floppy-o fa-pull-right action"></i></a>
                         <a class="action-link" href="#/comments/{{item.id}}"><i class="fa fa-comments fa-pull-right action"></i></a>
                     </div>
                 </div>

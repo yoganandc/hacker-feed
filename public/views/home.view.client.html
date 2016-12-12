@@ -27,6 +27,8 @@
         <div class="row">
             <div id="main-panel" class="col-xs-12 col-sm-8 col-sm-offset-2">
 
+                <p ng-show="model.message" class="bg-success message-home">{{model.message}}</p>
+
                 <ul class="nav nav-tabs">
                     <li class="active">
                         <a data-toggle="tab" href data-target="#board">Board</a>
@@ -45,7 +47,7 @@
                 <!-- Tab Panes -->
                 <div class="tab-content">
                     <div class="tab-pane fade in active" id="board">
-                        <h1> HEY HEY </h1>
+                        <div ng-include src="'/views/include/home/board.view.client.html'"></div>
                     </div>
                     <div class="tab-pane fade" id="hn-top">
                         <div ng-include src="'views/include/home/hn-top.view.client.html'"></div>

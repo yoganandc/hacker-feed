@@ -13,6 +13,7 @@ module.exports = function(model, UserModel, utils, q) {
                 }
                 else {
 
+                    item._user = userId
                     model
                         .create(item, function(err, res) {
                             if(err) {

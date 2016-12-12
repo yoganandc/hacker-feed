@@ -99,8 +99,17 @@ a {
     border-radius: 5px;
 }
 
+.message-home {
+    padding: 15px;
+    border-radius: 5px;
+}
+
 .table-friends {
     margin-top: 20px;
+}
+
+.list-p {
+    margin-bottom: 0px;
 }
 
 #login-panel {
