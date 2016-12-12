@@ -73,6 +73,7 @@ module.exports = function (app, passport, UserModel, utils, ObjectId) {
 
     app.post("/api/user", createUser)
     app.get("/api/user/:uid", findUserById)
+    app.get("/api/user", searchUsersByUsername)
     app.put("/api/user/:uid", updateUser)
     app.put("/api/user/:uid/request/:fid", friendRequest)
     app.put("/api/user/:uid/approve/:fid", friendApprove)
@@ -132,6 +133,31 @@ module.exports = function (app, passport, UserModel, utils, ObjectId) {
                 else {
                     res.status(200).send(obj)
                 }
+            })
+            .catch(function (err) {
+                res.status(400).send({message: utils.extractErrorMessage(err)})
+            })
+    }
+
+    function searchUsersByUsername(req, res) {
+        console.log("GET /api/user")
+
+        if(!req.isAuthenticated()) {
+            res.status(401).send()
+            return
+        }
+
+        var username = req.query.search
+
+        if(!username) {
+            res.status(400).send({message: "No search string specified"})
+            return
+        }
+
+        UserModel
+            .searchUsersByUsername(username)
+            .then(function (obj) {
+                res.status(200).send(obj)
             })
             .catch(function (err) {
                 res.status(400).send({message: utils.extractErrorMessage(err)})
@@ -226,7 +252,7 @@ module.exports = function (app, passport, UserModel, utils, ObjectId) {
         var friendId = req.params.fid
 
         if (!utils.validate(friendId)) {
-            res.status(400).send({message: "No user with given ID found"})
+            res.status(400).send({message: "No friend with given ID found"})
             return
         }
 
@@ -241,7 +267,7 @@ module.exports = function (app, passport, UserModel, utils, ObjectId) {
     }
 
     function friendApprove(req, res) {
-        console.log("PUT /api/user/:uid/request/:fid")
+        console.log("PUT /api/user/:uid/approve/:fid")
 
         var userId = req.params.uid
 
@@ -264,7 +290,7 @@ module.exports = function (app, passport, UserModel, utils, ObjectId) {
         var friendId = req.params.fid
 
         if (!utils.validate(friendId)) {
-            res.status(400).send({message: "No user with given ID found"})
+            res.status(400).send({message: "No friend with given ID found"})
             return
         }
 

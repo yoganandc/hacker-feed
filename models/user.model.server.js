@@ -230,6 +230,33 @@ module.exports = function (model, utils, q) {
         return deferred.promise
     }
 
+    // note: this returns the password too!
+    function searchUsersByUsername(username) {
+        var deferred = q.defer()
+
+        model
+            .find()
+            .or([{username: new RegExp(username, "i")}, {firstName: new RegExp(username, "i")}, {lastName: new RegExp(username, "i")}])
+            .lean()
+            .exec(function (err, res) {
+                if(err) {
+                    deferred.reject(err)
+                }
+                else {
+                    res.forEach(function(user) {
+                        delete user.password
+                        delete user.friends
+                        delete user.requests
+                        delete user.approvals
+                        delete user.items
+                    })
+                    deferred.resolve(res)
+                }
+            })
+
+        return deferred.promise
+    }
+
     return {
         createUser: createUser,
         findUserById: findUserById,
@@ -237,6 +264,7 @@ module.exports = function (model, utils, q) {
         updateUser: updateUser,
         deleteUser: deleteUser,
         friendRequest: friendRequest,
-        friendApprove: friendApprove
+        friendApprove: friendApprove,
+        searchUsersByUsername: searchUsersByUsername
     }
 }

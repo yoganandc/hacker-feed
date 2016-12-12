@@ -15,6 +15,11 @@
             return $http.get(url)
         }
 
+        function searchUsersByUsername(username) {
+            var url = "/api/user?search=" + username
+            return $http.get(url)
+        }
+
         function findUserByCredentials(username, password) {
             var url = "/api/user/login"
             var creds = {username: username, password: password}
@@ -70,15 +75,28 @@
             return deferred.promise
         }
 
+        function friendRequest(userId, friendId) {
+            var url = "/api/user/" + userId + "/request/" + friendId
+            return $http.put(url)
+        }
+
+        function friendApprove(userId, friendId) {
+            var url = "/api/user/" + userId + "/approve/" + friendId
+            return $http.put(url)
+        }
+
         return {
             loggedIn: loggedIn,
             createUser: createUser,
             findUserById: findUserById,
+            searchUsersByUsername: searchUsersByUsername,
             findUserByCredentials: findUserByCredentials,
             updateUser: updateUser,
             deleteUser: deleteUser,
             logout: logout,
-            users: users
+            users: users,
+            friendRequest: friendRequest,
+            friendApprove: friendApprove
         }
 
     }

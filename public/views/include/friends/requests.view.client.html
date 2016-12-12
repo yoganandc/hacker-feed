@@ -1,3 +1,30 @@
 <div ng-controller="RequestController as child2">
-    <p ng-if="child2.requests.length === 0" class="bg-success message">No friend requests at this time.</p>
+
+    <p ng-show="child2.message" class="bg-success message">{{child2.message}}</p>
+
+    <div ng-if="child2.requests.length > 0">
+        <table class="table table-hover table-friends">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Username</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="request in child2.requests">
+                <th scope="row">{{$index + 1}}</th>
+                <td>{{request.username}}</td>
+                <td>{{request.firstName}}</td>
+                <td>{{request.lastName}}</td>
+                <td>{{request.email}}</td>
+                <td><a title="Approve Friend Request" ng-click="child2.friendApprove(request._id)"><i class="fa fa-check"></i></a> </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <a href class="btn btn-primary" ng-click="child2.init()"><i class="fa fa-refresh"></i> Refresh</a>
 </div>
