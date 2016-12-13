@@ -93,7 +93,23 @@ cannot view this content unless you are a friend of this user.
 
 #### Profile
 
-The profile page shows you information about this user including their username, first name, last name, and email
+The profile page shows you information about this user including their username, first name, last name, and email.
+
+### 6. Admin
+
+Admin accounts are accounts that in addition to the features a regular account has, also can update, and delete all other
+accounts. They can also create new admin accounts.
+
+#### Search
+
+This tab enables you to search for users of the hacker-news website. The list of results will show all users whose username, 
+first name, or last name contained your query. You can click on the link to view their profile. You can also click on the edit
+icon to edit the user's details and also delete their account.
+
+#### Create/View
+
+This tab shows a list of all other admins users registered. You can also create new admin users on this tab. Note that 
+all accounts created here will be admin accounts. If you want to create a regular account, use the register page.
 
 ## # Front-End Implementation
 
@@ -108,13 +124,14 @@ jQuery(Bootstrap dependency), and AngularJS (JavaScript).
 
 ### Controllers
 
-There are five top level controllers (one for each of the features).
+There are six top level controllers (one for each of the features).
 
 1. **HomeController:** controls posts on the user's board, and shows Hacker News top, best, and new posts.
-2. **CommentController:** shows comments from Hacker News for a post.
-3. **AccountController:** controls user registration, login, logout, and profile.
-4. **FriendController:** controls user's friends, requests received, requests sent, and searching for users.
-5. **UserController:** shows a user's board (if they are a friend) and the user's profile
+1. **CommentController:** shows comments from Hacker News for a post.
+1. **AccountController:** controls user registration, login, logout, and profile.
+1. **FriendController:** controls user's friends, requests received, requests sent, and searching for users.
+1. **UserController:** shows a user's board (if they are a friend) and the user's profile.
+1. **AdminController:** controls admin operations and shows list of admin users.
 
 ## # Back-End Implementation
 
