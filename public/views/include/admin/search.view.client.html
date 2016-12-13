@@ -1,0 +1,54 @@
+<div ng-controller="AdminSearchController as model">
+    <div id="search-panel">
+        <p>Search results will include all users whose username, first name, or last name contain your query string.</p>
+
+        <div ng-show="model.error" class="alert alert-danger">
+            {{model.error}}
+        </div>
+
+        <form class="form-inline">
+            <div class="form-group">
+                <label class="sr-only" for="query">Search</label>
+                <input type="text" class="form-control" id="query" ng-model="model.query">
+            </div>
+            <div class="form-group">
+                <a class="btn btn-primary" ng-click="model.search()">Search</a>
+            </div>
+        </form>
+    </div>
+
+    <p ng-show="model.message" class="bg-success message">{{model.message}}</p>
+
+    <div ng-if="model.results.length > 0">
+        <table class="table table-hover table-friends">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Username</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="result in model.results">
+                <th scope="row">{{$index + 1}}</th>
+                <td>
+                    <a ng-if="result._id !== model.user._id" href="#/user/{{result._id}}">{{result.username}}</a>
+                    <span ng-if="result._id === model.user._id">{{result.username}}</span>
+                </td>
+                <td>{{result.firstName}}</td>
+                <td>{{result.lastName}}</td>
+                <td>{{result.email}}</td>
+                <td>
+                    <a ng-if="model.user.friends.indexOf(result._id) === -1 && model.user.approvals.indexOf(result._id) === -1 && model.user.requests.indexOf(result._id) === -1  && result._id !== model.user._id"
+                       title="Add Friend" ng-click="model.friendRequest(result._id)">
+                        <i class="fa fa-plus"></i>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

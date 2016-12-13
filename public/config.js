@@ -44,6 +44,11 @@
                 controller: "CommentController",
                 controllerAs: "model"
             })
+            .when("/admin", {
+                templateUrl: "/views/admin.view.client.html",
+                controller: "AdminController",
+                controllerAs: "model"
+            })
             .otherwise({
                 redirectTo: "/home"
             })

@@ -9,15 +9,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href>
+                <a class="navbar-brand" href="#/home">
                     <i class="fa fa-hacker-news fa-lg"></i>HackerFeed
                 </a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                    <li ng-if="model.user.type === 'STANDARD'"><a href="#/admin">Admin Panel</a></li>
                     <li><a href="#/profile">Profile</a></li>
-                    <li><a href="#/friends">Friends</a></li>
                     <li><a href="#/logout">Logout</a></li>
                 </ul>
             </div>
@@ -32,34 +30,23 @@
 
                 <ul class="nav nav-tabs">
                     <li class="active">
-                        <a data-toggle="tab" href data-target="#board">Board</a>
+                        <a data-toggle="tab" href data-target="#search">Search</a>
                     </li>
                     <li>
-                        <a data-toggle="tab" href data-target="#hn-top">HN Top</a>
-                    </li>
-                    <li>
-                        <a data-toggle="tab" href data-target="#hn-best">HN Best</a>
-                    </li>
-                    <li>
-                        <a data-toggle="tab" href data-target="#hn-new">HN New</a>
+                        <a data-toggle="tab" href data-target="#create">New Admin</a>
                     </li>
                 </ul>
 
                 <!-- Tab Panes -->
                 <div class="tab-content">
-                    <div class="tab-pane fade in active" id="board">
-                        <div ng-include src="'/views/include/home/board.view.client.html'"></div>
+                    <div class="tab-pane fade in active" id="search">
+                        <div ng-include src="'/views/include/admin/search.view.client.html'"></div>
                     </div>
-                    <div class="tab-pane fade" id="hn-top">
-                        <div ng-include src="'views/include/home/hn-top.view.client.html'"></div>
-                    </div>
-                    <div class="tab-pane fade" id="hn-best">
-                        <div ng-include src="'views/include/home/hn-best.view.client.html'"></div>
-                    </div>
-                    <div class="tab-pane fade" id="hn-new">
-                        <div ng-include src="'views/include/home/hn-new.view.client.html'"></div>
+                    <div class="tab-pane fade" id="create">
+                        <div ng-include src="'views/include/admin/create.view.client.html'"></div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

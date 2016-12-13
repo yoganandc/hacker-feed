@@ -22,6 +22,7 @@
                 .loggedIn()
                 .then(function(obj) {
                     vm.user = obj.data
+
                     vm.friends = []
 
                     UserService

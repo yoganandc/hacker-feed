@@ -15,6 +15,7 @@
                 .loggedIn()
                 .then(function (obj) {
                     vm.user = obj.data
+
                 }, function (err) {
                     $location.url("/login")
                 })
