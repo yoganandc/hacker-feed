@@ -11,6 +11,7 @@ module.exports = function (app, passport, UserModel, utils, ObjectId) {
     app.post("/api/user/logout", logout)
 
     app.post("/api/user", createUser)
+    app.get("/api/user/admin", findAdminUsers)
     app.get("/api/user/:uid", findUserById)
     app.get("/api/user", searchUsersByUsername)
     app.put("/api/user/:uid", updateUser)
@@ -138,6 +139,29 @@ module.exports = function (app, passport, UserModel, utils, ObjectId) {
                 res.status(200).send(obj)
             })
             .catch(function (err) {
+                res.status(400).send({message: utils.extractErrorMessage(err)})
+            })
+    }
+
+    function findAdminUsers(req, res) {
+        console.log("GET /api/user/admin")
+
+        if(!req.isAuthenticated()) {
+            res.status(401).send()
+            return
+        }
+
+        if(req.user.type !== "ADMIN") {
+            res.status(403).send()
+            return
+        }
+
+        UserModel
+            .findAdminUsers()
+            .then(function(obj) {
+                res.status(200).send(obj)
+            })
+            .catch(function(err) {
                 res.status(400).send({message: utils.extractErrorMessage(err)})
             })
     }

@@ -149,13 +149,73 @@
         }
     }
 
-    function AdminCreateController() {
+    function AdminCreateController($timeout, UserService) {
         var vm = this
+        vm.create = create
+        vm.init = init
 
         init()
 
         function init() {
 
+            UserService
+                .loggedIn()
+                .then(function(obj) {
+                    vm.user = obj.data
+
+                    UserService
+                        .findAdminUsers()
+                        .then(function(obj) {
+                            vm.results = obj.data
+                        }, function(err) {
+                            console.log(err)
+                        })
+
+                }, function(err) {
+                    console.log(err)
+                })
+        }
+
+        function create() {
+            delete vm.error
+            delete vm.message
+
+            var valid = (typeof vm.username !== "undefined") && vm.username
+            if(!valid) {
+                msg = "No username entered"
+            }
+
+            if(valid) {
+                valid = (typeof vm.password !== "undefined") && vm.password
+                if(!valid) {
+                    msg = "No password entered"
+                }
+            }
+
+            if(valid) {
+                UserService
+                    .createUser({username: vm.username, password: vm.password})
+                    .then(function(obj) {
+
+                        vm.results.push(obj.data)
+                        vm.message = "Admin user created successfully!"
+                        $timeout(function() {
+                            delete vm.message
+                        }, 10000)
+
+                    }, function (err) {
+                        vm.error = err.data.message
+                        $timeout(function() {
+                            delete vm.error
+                        }, 10000)
+                    })
+            }
+            else {
+                vm.error = msg
+                $timeout(function() {
+                    delete vm.error
+                }, 10000)
+            }
         }
     }
 })()

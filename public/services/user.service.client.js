@@ -26,6 +26,11 @@
             return $http.post(url, creds)
         }
 
+        function findAdminUsers() {
+            var url = "/api/user/admin"
+            return $http.get(url)
+        }
+
         function updateUser(userId, user) {
             var url = "/api/user/" + userId
             return $http.put(url, user)
@@ -91,6 +96,7 @@
             findUserById: findUserById,
             searchUsersByUsername: searchUsersByUsername,
             findUserByCredentials: findUserByCredentials,
+            findAdminUsers: findAdminUsers,
             updateUser: updateUser,
             deleteUser: deleteUser,
             logout: logout,

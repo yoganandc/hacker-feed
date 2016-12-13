@@ -88,6 +88,31 @@ module.exports = function (model, utils, q) {
         return deferrred.promise
     }
 
+    function findAdminUsers() {
+        var deferred = q.defer()
+
+        model
+            .find({type: "ADMIN"})
+            .lean()
+            .exec(function (err, res) {
+                if(err) {
+                    deferred.reject(err)
+                }
+                else {
+                    res.forEach(function(user) {
+                        delete user.password
+                        delete user.items
+                        delete user.friends
+                        delete user.requests
+                        delete user.approvals
+                    })
+                    deferred.resolve(res)
+                }
+            })
+
+        return deferred.promise
+    }
+
     function updateUser(userId, user) {
         var deferred = q.defer()
 
@@ -289,6 +314,7 @@ module.exports = function (model, utils, q) {
         findUserById: findUserById,
         findUserByUsername: findUserByUsername,
         findUserByProfile: findUserByProfile,
+        findAdminUsers: findAdminUsers,
         updateUser: updateUser,
         deleteUser: deleteUser,
         friendRequest: friendRequest,
