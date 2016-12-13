@@ -191,7 +191,7 @@ module.exports = function (app, passport, UserModel, utils, ObjectId) {
             return
         }
 
-        if(!req.user._id.equals(userId) || req.user.type !== "ADMIN") {
+        if(!req.user._id.equals(userId) && req.user.type !== "ADMIN") {
             res.status(403).send()
             return
         }

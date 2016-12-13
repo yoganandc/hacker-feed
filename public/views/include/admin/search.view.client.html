@@ -1,25 +1,25 @@
-<div ng-controller="AdminSearchController as model">
+<div ng-controller="AdminSearchController as child1">
     <div id="search-panel">
         <p>Search results will include all users whose username, first name, or last name contain your query string.</p>
 
-        <div ng-show="model.error" class="alert alert-danger">
-            {{model.error}}
+        <div ng-show="child1.error" class="alert alert-danger">
+            {{child1.error}}
         </div>
 
         <form class="form-inline">
             <div class="form-group">
                 <label class="sr-only" for="query">Search</label>
-                <input type="text" class="form-control" id="query" ng-model="model.query">
+                <input type="text" class="form-control" id="query" ng-model="child1.query">
             </div>
             <div class="form-group">
-                <a class="btn btn-primary" ng-click="model.search()">Search</a>
+                <a class="btn btn-primary" ng-click="child1.search()">Search</a>
             </div>
         </form>
     </div>
 
-    <p ng-show="model.message" class="bg-success message">{{model.message}}</p>
+    <p ng-show="child1.message" class="bg-success message">{{child1.message}}</p>
 
-    <div ng-if="model.results.length > 0">
+    <div ng-if="child1.results.length > 0">
         <table class="table table-hover table-friends">
             <thead>
             <tr>
@@ -32,17 +32,17 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="result in model.results">
+            <tr ng-repeat="result in child1.results">
                 <th scope="row">{{$index + 1}}</th>
                 <td>
-                    <a ng-if="result._id !== model.user._id" href="#/user/{{result._id}}">{{result.username}}</a>
-                    <span ng-if="result._id === model.user._id">{{result.username}}</span>
+                    <a ng-if="result._id !== child1.user._id" href="#/user/{{result._id}}">{{result.username}}</a>
+                    <span ng-if="result._id === child1.user._id">{{result.username}}</span>
                 </td>
                 <td>{{result.firstName}}</td>
                 <td>{{result.lastName}}</td>
                 <td>{{result.email}}</td>
                 <td>
-                    <a ng-if="result._id !== model.user._id" title="Update User" ng-click="model.openModal(result._id)">
+                    <a ng-if="result._id !== child1.user._id" title="Update User" ng-click="child1.openModal(result._id)">
                         <i class="fa fa-pencil-square-o"></i>
                     </a>
                 </td>
@@ -52,21 +52,42 @@
     </div>
 
     <!-- Modal -->
-    <div share-modal="{{model.showModal}}" class="modal fade" tabindex="-1" data-backdrop="static"
+    <div share-modal="{{child1.showModal}}" class="modal fade" tabindex="-1" data-backdrop="static"
          data-keyboard="false">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" ng-click="model.closeModal()"><span>&times;</span></button>
+                    <button type="button" class="close" ng-click="child1.closeModal()"><span>&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">Update User</h4>
                 </div>
                 <div class="modal-body">
                     <form>
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input id="username" type="text" class="form-control" ng-model="child1.profile.username" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label> (Leave blank to not update)
+                            <input id="password" type="password" class="form-control" ng-model="child1.profile.password">
+                        </div>
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input id="firstName" type="text" class="form-control" ng-model="child1.profile.firstName">
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input id="lastName" type="text" class="form-control" ng-model="child1.profile.lastName">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input id="email" type="text" class="form-control" ng-model="child1.profile.email">
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" ng-click="model.closeModal()">Cancel</button>
-                    <button type="button" class="btn btn-primary" ng-click="model.updateUser()">Share</button>
+                    <button type="button" class="btn btn-danger pull-left" ng-click="child1.deleteUser()">Delete</button>
+                    <button type="button" class="btn btn-default" ng-click="child1.closeModal()">Cancel</button>
+                    <button type="button" class="btn btn-primary" ng-click="child1.updateUser()">Update</button>
                 </div>
             </div>
         </div>

@@ -26,10 +26,11 @@
         }
     }
 
-    function AdminSearchController(UserService) {
+    function AdminSearchController($timeout, UserService) {
         var vm = this
         vm.search = search
         vm.updateUser = updateUser
+        vm.deleteUser = deleteUser
         vm.openModal = openModal
         vm.closeModal = closeModal
         vm.showModal = false
@@ -64,7 +65,21 @@
 
         function openModal(userId) {
             vm.userId = userId
-            vm.showModal = true
+            delete vm.error
+            delete vm.message
+
+            UserService
+                .findUserById(userId)
+                .then(function(obj) {
+                    vm.showModal = true
+                    vm.profile = obj.data
+                }, function(err) {
+                    vm.error = err.data.message
+                    $timeout(function() {
+                        delete vm.error
+                    }, 10000)
+                })
+
         }
 
         function closeModal() {
@@ -72,7 +87,65 @@
         }
 
         function updateUser() {
-            vm.showModal = false
+            UserService
+                .updateUser(vm.userId, vm.profile)
+                .then(function(obj) {
+
+                    var index = -1
+                    for(var i = 0; i < vm.results.length; i++) {
+                        var result = vm.results[i]
+
+                        if(result._id === vm.userId) {
+                            index = i
+                            break
+                        }
+                    }
+
+                    vm.showModal = false
+                    vm.results.splice(index, 1, obj.data)
+                    vm.message = "Updated Successfully"
+                    $timeout(function() {
+                        delete vm.message
+                    }, 10000)
+
+                }, function(err) {
+                    vm.showModal = false
+                    vm.error = err.data.message
+                    $timeout(function() {
+                        delete vm.error
+                    }, 10000)
+                })
+        }
+
+        function deleteUser() {
+            UserService
+                .deleteUser(vm.userId)
+                .then(function(obj) {
+
+                    var index = -1
+                    for(var i = 0; i < vm.results.length; i++) {
+                        var result = vm.results[i]
+
+                        if(result._id === vm.userId) {
+                            index = i
+                            break
+                        }
+                    }
+
+                    vm.showModal = false
+                    vm.results.splice(index, 1)
+                    vm.message = "Deleted Successfully"
+                    $timeout(function() {
+                        delete vm.message
+                    }, 10000)
+
+                }, function(err) {
+                    vm.showModal = false
+                    vm.error = err.data.message
+                    $timeout(function() {
+                        delete vm.error
+                    }, 10000)
+                })
         }
     }
 
