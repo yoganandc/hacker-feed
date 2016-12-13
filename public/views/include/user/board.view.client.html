@@ -15,7 +15,7 @@
 
         <div class="list-panel">
             <div ng-if="child1.items.length > 0">
-                <div ng-repeat="item in child1.items">
+                <div ng-repeat="item in child1.items  | orderBy:'$index':true">
                     <div class="panel">
                         <p ng-if="item.username" class="list-p">
                             {{item.username}} shared a post with {{model.friend.username}}:

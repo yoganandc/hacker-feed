@@ -3,7 +3,7 @@
 
     <div class="list-panel">
         <div ng-if="child4.items.length > 0">
-            <div ng-repeat="item in child4.items">
+            <div ng-repeat="item in child4.items | orderBy:'$index':true">
                 <div class="panel">
                     <p ng-if="item.username" class="list-p">
                         <strong>{{item.username}}</strong> shared a post:
