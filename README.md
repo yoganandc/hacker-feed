@@ -1,7 +1,7 @@
 # hacker-feed
 A single page web application where users can view, save, and share posts from Hacker News
 
-## Features
+## # Features
 
 ### 1. Home
 
@@ -95,6 +95,32 @@ cannot view this content unless you are a friend of this user.
 
 The profile page shows you information about this user including their username, first name, last name, and email
 
+## # Front-End Implementation
 
+The hacker-feed website is a responsive single web application that makes use of Bootstrap (CSS), FontAwesome (icons), 
+jQuery(Bootstrap dependency), and AngularJS (JavaScript).
 
+### Services
 
+1. **UserService:**  makes requests to the *User* resource of the hacker-feed API. 
+1. **ItemService:** makes requests to the *Item* resource of the hacker-feed API.
+1. **HackerNewsService:** makes requests to the (third party) [Hacker News API](https://github.com/HackerNews/API).
+
+### Controllers
+
+There are five top level controllers (one for each of the features).
+
+1. **HomeController:** controls posts on the user's board, and shows Hacker News top, best, and new posts.
+2. **CommentController:** shows comments from Hacker News for a post.
+3. **AccountController:** controls user registration, login, logout, and profile.
+4. **FriendController:** controls user's friends, requests received, requests sent, and searching for users.
+5. **UserController:** shows a user's board (if they are a friend) and the user's profile
+
+## # Back-End Implementation
+
+The hacker-feed API is RESTful API that makes use of Express, Mongoose, and Passport to implement two resources:
+
+1. **Users:** A user object contains basic account information, IDs of the user's friends, and IDs of posts shared with the user
+or the user saved.
+2. **Items:** An item object consists of the Hacker News post ID, the user ID the item belongs to, and an (optional) 2nd user ID
+which is the ID of the user who shared the item.
