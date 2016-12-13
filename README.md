@@ -1,5 +1,5 @@
 # hacker-feed
-A single page web application where users can view, save, and share posts from Hacker News
+A single page web application where users can view, save, and share posts from Hacker News.
 
 ## # Features
 
