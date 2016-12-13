@@ -42,13 +42,33 @@
                 <td>{{result.lastName}}</td>
                 <td>{{result.email}}</td>
                 <td>
-                    <a ng-if="model.user.friends.indexOf(result._id) === -1 && model.user.approvals.indexOf(result._id) === -1 && model.user.requests.indexOf(result._id) === -1  && result._id !== model.user._id"
-                       title="Add Friend" ng-click="model.friendRequest(result._id)">
-                        <i class="fa fa-plus"></i>
+                    <a ng-if="result._id !== model.user._id" title="Update User" ng-click="model.openModal(result._id)">
+                        <i class="fa fa-pencil-square-o"></i>
                     </a>
                 </td>
             </tr>
             </tbody>
         </table>
+    </div>
+
+    <!-- Modal -->
+    <div share-modal="{{model.showModal}}" class="modal fade" tabindex="-1" data-backdrop="static"
+         data-keyboard="false">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" ng-click="model.closeModal()"><span>&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Update User</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="model.closeModal()">Cancel</button>
+                    <button type="button" class="btn btn-primary" ng-click="model.updateUser()">Share</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
