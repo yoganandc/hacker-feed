@@ -124,7 +124,7 @@ jQuery(Bootstrap dependency), and AngularJS (JavaScript).
 
 ### Controllers
 
-There are six top level controllers (one for each of the features).
+There are six top level controllers (one for each of the features):
 
 1. **HomeController:** controls posts on the user's board, and shows Hacker News top, best, and new posts.
 1. **CommentController:** shows comments from Hacker News for a post.
