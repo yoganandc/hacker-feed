@@ -1,13 +1,17 @@
+if(!process.env.APP_PORT) {
+    throw new Error("port not set in environment")
+}
+
 if(!process.env.MLAB_USERNAME || !process.env.MLAB_PASSWORD) {
     throw new Error("mlab username and password not set in environment")
 }
 
-if(!process.env.FACEBOOK_APP_ID || !process.env.FACEBOOK_APP_SECRET) {
-    throw new Error("facebook credentials not set in environment")
-}
-
 if(!process.env.SESSION_SECRET) {
     throw new Error("session secret not set in environment")
+}
+
+if(!process.env.FACEBOOK_APP_ID || !process.env.FACEBOOK_APP_SECRET || !process.env.FACEBOOK_APP_URL) {
+    throw new Error("facebook credentials not set in environment")
 }
 
 var mongoose = require("mongoose")
@@ -45,7 +49,7 @@ db.once("open", function() {
         res.status(400).send({message: "Error"})
     })
 
-    app.listen(3000)
+    app.listen(process.env.APP_PORT)
     console.log("server started successfully")
 
 })
