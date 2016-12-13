@@ -97,8 +97,8 @@ The profile page shows you information about this user including their username,
 
 ### 6. Admin
 
-Admin accounts are accounts that in addition to the features a regular account has, also can update, and delete all other
-accounts. They can also create new admin accounts.
+Admin accounts are accounts have all of the features regular accounts have. In addition, they also can update, and delete 
+other accounts. They can also create new admin accounts.
 
 #### Search
 
