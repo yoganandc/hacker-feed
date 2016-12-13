@@ -6,10 +6,10 @@
             <div ng-repeat="item in child4.items">
                 <div class="panel">
                     <p ng-if="item.username" class="list-p">
-                        {{item.username}} shared a post with you:
+                        <strong>{{item.username}}</strong> shared a post:
                     </p>
                     <p ng-if="!item.username" class="list-p">
-                        You saved a post:
+                        <strong>You</strong> saved a post:
                     </p>
                     <a class="action-link" href="#/comments/{{item.post}}"><i class="fa fa-comments fa-lg fa-pull-right action"></i></a>
                     <a href="{{item.url}}" target="_blank">{{item.title}}</a>
@@ -18,5 +18,5 @@
         </div>
     </div>
 
-    <a href class="btn btn-primary" ng-click="child4.init()"><i class="fa fa-refresh"></i> Refresh</a>
+    <a href class="btn btn-primary" ng-click="child4.refresh()"><i class="fa fa-refresh"></i> Refresh</a>
 </div>

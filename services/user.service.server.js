@@ -1,64 +1,31 @@
-var LocalStrategy = require("passport-local")
+var LocalStrategy = require("passport-local").Strategy
+var FacebookStrategy = require("passport-facebook").Strategy
 var bcrypt = require("bcrypt-nodejs")
 
 module.exports = function (app, passport, UserModel, utils, ObjectId) {
 
-    passport.serializeUser(function(user, done) {
-        done(null, user._id)
-    })
+    app.post("/api/user/login", passport.authenticate("local"), loginLocal)
+    app.get("/api/auth/facebook", passport.authenticate("facebook", {scope: "email"}))
+    app.get("/api/auth/facebook/callback", passport.authenticate("facebook", {successRedirect: "/#/home", failureRedirect: "/#/login?error=Login Failed"}))
+    app.get("/api/user/loggedin", loggedIn)
+    app.post("/api/user/logout", logout)
 
-    passport.deserializeUser(function(id, done) {
-        UserModel
-            .findUserById(id)
-            .then(function(obj) {
-                done(null, obj)
-            })
-            .catch(function(err) {
-                done(null, err)
-            })
-    })
+    app.post("/api/user", createUser)
+    app.get("/api/user/:uid", findUserById)
+    app.get("/api/user", searchUsersByUsername)
+    app.put("/api/user/:uid", updateUser)
+    app.put("/api/user/:uid/request/:fid", friendRequest)
+    app.put("/api/user/:uid/approve/:fid", friendApprove)
+    app.delete("/api/user/:uid", deleteUser)
 
-    passport.use(new LocalStrategy(
-        function(username, password, done) {
-            console.log("AUTH")
-            UserModel
-                .findUserByUsername(username)
-                .then(function(obj) {
-                    if(bcrypt.compareSync(password, obj.password)) {
-                        delete obj.password
-                        return done(null, obj)
-                    }
-                    else {
-                        return done(null, false, {message: "No user with given credentials found"})
-                    }
-                })
-                .catch(function(err) {
-                    return done(null, false, {message: utils.extractErrorMessage(err)})
-                })
-        }
-    ))
-
-    app.post("/api/user/login", passport.authenticate("local"), function(req, res) {
+    function loginLocal(req, res) {
         console.log("POST /api/user/login")
 
         res.status(200).send(req.user)
         return
-    })
+    }
 
-    app.post("/api/user/logout", function(req, res) {
-        console.log("POST /api/user/logout")
-
-        if(req.isAuthenticated()) {
-            req.session.destroy(function(err) {
-                res.status(204).send()
-            })
-        }
-        else {
-            res.status(204).send()
-        }
-    })
-
-    app.get("/api/user/loggedin", function(req, res) {
+    function loggedIn(req, res) {
         console.log("GET /api/user/loggedin")
 
         if(req.isAuthenticated()) {
@@ -69,26 +36,37 @@ module.exports = function (app, passport, UserModel, utils, ObjectId) {
             res.status(404).send()
             return
         }
-    })
+    }
 
-    app.post("/api/user", createUser)
-    app.get("/api/user/:uid", findUserById)
-    app.get("/api/user", searchUsersByUsername)
-    app.put("/api/user/:uid", updateUser)
-    app.put("/api/user/:uid/request/:fid", friendRequest)
-    app.put("/api/user/:uid/approve/:fid", friendApprove)
-    app.delete("/api/user/:uid", deleteUser)
+    function logout(req, res) {
+        console.log("POST /api/user/logout")
+
+        if(req.isAuthenticated()) {
+            req.session.destroy(function(err) {
+                res.status(204).send()
+            })
+        }
+        else {
+            res.status(204).send()
+        }
+    }
 
     function createUser(req, res) {
         console.log("POST /api/user")
 
         var user = req.body
 
-        if(typeof user.password !== "undefined") {
-            user.password = bcrypt.hashSync(user.password)
+        if(typeof user.password !== "undefined" && user.password && user.password.trim()) {
+            user.password = bcrypt.hashSync(user.password.trim())
         }
 
-        user.type = "STANDARD"
+        if(req.isAuthenticated() && req.user.type === "ADMIN") {
+            user.type = "ADMIN"
+        }
+        else {
+            user.type = "STANDARD"
+        }
+
         UserModel
             .createUser(user)
             .then(function (obj) {
@@ -180,7 +158,7 @@ module.exports = function (app, passport, UserModel, utils, ObjectId) {
             return
         }
 
-        if(!req.user._id.equals(userId)) {
+        if(!req.user._id.equals(userId) && req.user.type !== "ADMIN") {
             res.status(403).send()
             return
         }
@@ -213,7 +191,7 @@ module.exports = function (app, passport, UserModel, utils, ObjectId) {
             return
         }
 
-        if(!req.user._id.equals(userId)) {
+        if(!req.user._id.equals(userId) || req.user.type !== "ADMIN") {
             res.status(403).send()
             return
         }
@@ -303,4 +281,72 @@ module.exports = function (app, passport, UserModel, utils, ObjectId) {
                 res.status(400).send({message: utils.extractErrorMessage(err)})
             })
     }
+
+    // --------------------- PASSPORT CONFIG ---------------------
+
+    passport.use(new LocalStrategy(
+        function(username, password, done) {
+            UserModel
+                .findUserByUsername(username)
+                .then(function(obj) {
+                    if(bcrypt.compareSync(password, obj.password)) {
+                        delete obj.password
+                        return done(null, obj)
+                    }
+                    else {
+                        return done(null, false, {message: "No user with given credentials found"})
+                    }
+                })
+                .catch(function(err) {
+                    return done(null, false, {message: utils.extractErrorMessage(err)})
+                })
+        }
+    ))
+
+    passport.use(new FacebookStrategy({
+        clientID: process.env.FACEBOOK_APP_ID,
+        clientSecret: process.env.FACEBOOK_APP_SECRET,
+        callbackURL: "http://localhost:3000/api/auth/facebook/callback",
+        enableProof: true,
+        profileFields: ["id", "emails"]
+    }, function(accessToken, refreshToken, profile, done) {
+
+        UserModel
+            .findUserByProfile(profile.id)
+            .then(function(obj) {
+                return done(null, obj)
+            })
+            .catch(function(err) {
+
+                UserModel
+                    .createUser({
+                        username: profile.emails[0].value,
+                        profile: profile.id,
+                        type: "STANDARD"
+                    })
+                    .then(function (obj) {
+                        return done(null, obj)
+                    })
+                    .catch(function(err) {
+                        console.log(err)
+                        return done(null, false, {message: utils.extractErrorMessage(err)})
+                    })
+
+            })
+    }))
+
+    passport.serializeUser(function(user, done) {
+        done(null, user._id)
+    })
+
+    passport.deserializeUser(function(id, done) {
+        UserModel
+            .findUserById(id)
+            .then(function(obj) {
+                done(null, obj)
+            })
+            .catch(function(err) {
+                done(null, err)
+            })
+    })
 }

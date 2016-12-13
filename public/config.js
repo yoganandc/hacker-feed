@@ -3,7 +3,7 @@
         .module("HackerFeed")
         .config(Config)
 
-    function Config($routeProvider) {
+    function Config($routeProvider, $rootScopeProvider) {
         $routeProvider
             .when("/login", {
                 templateUrl: "/views/login.view.client.html",
@@ -25,6 +25,11 @@
                 controller: "FriendController",
                 controllerAs: "model"
             })
+            .when("/user/:id", {
+                templateUrl: "/views/user.view.client.html",
+                controller: "UserController",
+                controllerAs: "model"
+            })
             .when("/logout", {
                 template: " ",
                 controller: "LogoutController"
@@ -34,11 +39,6 @@
                 controller: "HomeController",
                 controllerAs: "model"
             })
-            // .when("/item/:id", {
-            //     templateUrl: "/views/item.view.client.html",
-            //     controller: "ItemController",
-            //     controllerAs: "model"
-            // })
             .when("/comments/:id", {
                 templateUrl: "/views/comments.view.client.html",
                 controller: "CommentController",
@@ -47,5 +47,8 @@
             .otherwise({
                 redirectTo: "/home"
             })
+
+        $rootScopeProvider
+            .digestTtl(15)
     }
 })()

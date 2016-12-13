@@ -9,12 +9,37 @@
                         <a target="_blank" href="{{item.url}}">{{item.title}}</a>
                     </div>
                     <div class="col-xs-4 col-sm-4">
-                        <a class="action-link" href="#"><i class="fa fa-share-alt fa-pull-right action"></i></a>
+                        <a class="action-link" href ng-click="model.openModal(item.id)"><i class="fa fa-share-alt fa-pull-right action"></i></a>
                         <a class="action-link" href ng-click="model.saveItem(item.id)"><i class="fa fa-floppy-o fa-pull-right action"></i></a>
                         <a class="action-link" href="#/comments/{{item.id}}"><i class="fa fa-comments fa-pull-right action"></i></a>
                     </div>
                 </div>
 
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div share-modal="{{model.showModal}}" class="modal fade" tabindex="-1" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" ng-click="model.closeModal()"><span>&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Share With</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="checkbox" ng-repeat="friend in model.friends">
+                                <label>
+                                    <input type="checkbox" ng-model="model.friendIds[$index].selected">{{friend.username}}
+                                </label>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" ng-click="model.closeModal()">Cancel</button>
+                        <button type="button" class="btn btn-primary" ng-click="model.shareItem()">Share</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

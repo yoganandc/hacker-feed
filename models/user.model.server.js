@@ -1,3 +1,5 @@
+var bcrypt = require("bcrypt-nodejs")
+
 module.exports = function (model, utils, q) {
 
     function createUser(user) {
@@ -65,6 +67,27 @@ module.exports = function (model, utils, q) {
         return deferred.promise
     }
 
+    function findUserByProfile(profile) {
+        var deferrred = q.defer()
+
+        model.findOne({profile: profile},
+            function (err, res) {
+                if(err) {
+                    deferrred.reject(err)
+                }
+                else if(!res) {
+                    deferrred.reject("No user with given profile found")
+                }
+                else {
+                    res = res.toObject()
+                    delete res.password
+                    deferrred.resolve(res)
+                }
+            })
+
+        return deferrred.promise
+    }
+
     function updateUser(userId, user) {
         var deferred = q.defer()
 
@@ -79,6 +102,10 @@ module.exports = function (model, utils, q) {
                 utils.copy(res, user, "firstName")
                 utils.copy(res, user, "lastName")
                 utils.copy(res, user, "email")
+
+                if (typeof user.password !== "undefined" && user.password && user.password.trim()) {
+                    res.password = bcrypt.hashSync(user.password.trim())
+                }
 
                 res.save(function (err, res2) {
                     if (err) {
@@ -239,11 +266,11 @@ module.exports = function (model, utils, q) {
             .or([{username: new RegExp(username, "i")}, {firstName: new RegExp(username, "i")}, {lastName: new RegExp(username, "i")}])
             .lean()
             .exec(function (err, res) {
-                if(err) {
+                if (err) {
                     deferred.reject(err)
                 }
                 else {
-                    res.forEach(function(user) {
+                    res.forEach(function (user) {
                         delete user.password
                         delete user.friends
                         delete user.requests
@@ -261,6 +288,7 @@ module.exports = function (model, utils, q) {
         createUser: createUser,
         findUserById: findUserById,
         findUserByUsername: findUserByUsername,
+        findUserByProfile: findUserByProfile,
         updateUser: updateUser,
         deleteUser: deleteUser,
         friendRequest: friendRequest,

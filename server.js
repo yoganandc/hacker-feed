@@ -2,6 +2,10 @@ if(!process.env.MLAB_USERNAME || !process.env.MLAB_PASSWORD) {
     throw new Error("mlab username and password not set in environment")
 }
 
+if(!process.env.FACEBOOK_APP_ID || !process.env.FACEBOOK_APP_SECRET) {
+    throw new Error("facebook credentials not set in environment")
+}
+
 if(!process.env.SESSION_SECRET) {
     throw new Error("session secret not set in environment")
 }

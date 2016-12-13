@@ -141,7 +141,7 @@
                             })
                     }
                     else {
-                        deferred.reject(null)
+                        deferred.resolve({item: obj, comments: comments})
                     }
 
 

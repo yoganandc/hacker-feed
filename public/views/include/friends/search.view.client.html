@@ -34,7 +34,10 @@
             <tbody>
             <tr ng-repeat="result in child4.results">
                 <th scope="row">{{$index + 1}}</th>
-                <td>{{result.username}}</td>
+                <td>
+                    <a ng-if="result._id !== child4.user._id" href="#/user/{{result._id}}">{{result.username}}</a>
+                    <span ng-if="result._id === child4.user._id">{{result.username}}</span>
+                </td>
                 <td>{{result.firstName}}</td>
                 <td>{{result.lastName}}</td>
                 <td>{{result.email}}</td>

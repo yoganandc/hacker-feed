@@ -16,7 +16,7 @@
             <tbody>
             <tr ng-repeat="friend in child1.friends">
                 <th scope="row">{{$index + 1}}</th>
-                <td>{{friend.username}}</td>
+                <td><a href="#/user/{{friend._id}}">{{friend.username}}</a></td>
                 <td>{{friend.firstName}}</td>
                 <td>{{friend.lastName}}</td>
                 <td>{{friend.email}}</td>

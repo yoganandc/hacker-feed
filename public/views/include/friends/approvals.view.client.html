@@ -15,7 +15,7 @@
             <tbody>
             <tr ng-repeat="approval in child3.approvals">
                 <th scope="row">{{$index + 1}}</th>
-                <td>{{approval.username}}</td>
+                <td><a href="#/user/{{approval._id}}">{{approval.username}}</a></td>
                 <td>{{approval.firstName}}</td>
                 <td>{{approval.lastName}}</td>
                 <td>{{approval.email}}</td>

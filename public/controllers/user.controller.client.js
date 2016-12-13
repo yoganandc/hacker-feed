@@ -1,163 +1,99 @@
 (function() {
     angular
         .module("HackerFeed")
-        .controller("LoginController", LoginController)
-        .controller("RegisterController", RegisterController)
-        .controller("ProfileController", ProfileController)
-        .controller("LogoutController", LogoutController)
+        .controller("UserController", UserController)
+        .controller("UserProfileController", UserProfileController)
+        .controller("UserBoardController", UserBoardController)
 
-    function LoginController($location, UserService) {
+    function UserController($location, $routeParams, UserService) {
         var vm = this
-        vm.login = login
+        var friendId = $routeParams.id
 
         function init() {
             UserService
                 .loggedIn()
-                .then(function(obj) {
-                    $location.url("/home")
-                }, function(err) {
-
-                })
-        }
-
-        function login() {
-            delete vm.error
-            var msg = ""
-
-            var valid = (typeof vm.username !== "undefined") && vm.username
-            if(!valid) {
-                msg = "No username entered"
-            }
-
-            if(valid) {
-                valid = (typeof vm.password !== "undefined") && vm.password
-                if(!valid) {
-                    msg = "No password entered"
-                }
-            }
-
-            if(valid) {
-                UserService
-                    .findUserByCredentials(vm.username, vm.password)
-                    .then(function(obj) {
-                        $location.url("/home")
-                    }, function(err) {
-                        if(err.data.message) {
-                            vm.error = err.data.message
-                        }
-                        else {
-                            vm.error = "Incorrect username or password"
-                        }
-                    })
-            }
-            else {
-                vm.error = msg
-            }
-        }
-
-        init()
-    }
-
-    function RegisterController($location, UserService) {
-        var vm = this
-        vm.register = register
-
-        function init() {
-            UserService
-                .loggedIn()
-                .then(function(obj) {
-                    $location.url("/home")
-                }, function(err) {
-
-                })
-        }
-
-        function register() {
-            delete vm.error
-            var msg = ""
-
-            var valid = (typeof vm.username !== "undefined") && vm.username
-            if(!valid) {
-                msg = "No username entered"
-            }
-
-            if(valid) {
-                valid = (typeof vm.password !== "undefined") && vm.password
-                if(!valid) {
-                    msg = "No password entered"
-                }
-            }
-
-            if(valid) {
-                UserService
-                    .createUser({username: vm.username, password: vm.password})
-                    .then(function(obj) {
-                        $location.url("/home")
-                    }, function (err) {
-                        vm.error = err.data.message
-                    })
-            }
-            else {
-                vm.error = msg
-            }
-        }
-
-        init()
-    }
-
-    function ProfileController($location, UserService) {
-        var vm = this
-        vm.updateUser = updateUser
-        vm.deleteUser = deleteUser
-
-        function init() {
-            UserService
-                .loggedIn()
-                .then(function(obj) {
-                    vm.user = obj.data
-                }, function(err) {
-                    $location.url("/login")
-                })
-        }
-
-        function updateUser() {
-            delete vm.error
-
-            UserService
-                .updateUser(vm.user._id, vm.user)
-                .then(function(obj) {
-                    vm.user = obj.data
-                }, function(err) {
-                    vm.error = err.data.message
-                })
-        }
-
-        function deleteUser() {
-            delete vm.error
-
-            UserService
-                .deleteUser(vm.user._id)
-                .then(function(obj) {
-                    $location.url("/login")
-                }, function(err) {
-                    vm.error = err.data.message
-                })
-        }
-
-        init()
-    }
-
-    function LogoutController($location, $rootScope, UserService) {
-
-        function init() {
-            delete $rootScope.boardItems
-
-            UserService
-                .logout()
                 .then(function (obj) {
-                    $location.url("/login")
-                }, function (err) {
+                    vm.user = obj.data
 
+                    UserService
+                        .findUserById(friendId)
+                        .then(function(obj) {
+
+                            vm.friend = obj.data
+
+                        }, function(err) {
+                            $location.url("/home")
+                        })
+                }, function (err) {
+                    $location.url("/login")
+                })
+        }
+
+        init()
+    }
+
+    function UserProfileController(UserService) {
+        var vm = this
+
+        function init() {
+
+        }
+
+        init()
+    }
+
+    function UserBoardController($routeParams, UserService, ItemService, HackerNewsService) {
+        var vm = this
+        vm.refresh = refresh
+
+        function init() {
+            refresh()
+        }
+
+        function refresh() {
+            var friendId = $routeParams.id
+
+            UserService
+                .findUserById(friendId)
+                .then(function(obj) {
+
+                    vm.user = obj.data
+
+                    ItemService
+                        .findItemsByUser(vm.user._id)
+                        .then(function(obj) {
+
+                            vm.items = obj.data
+
+                            vm.items.forEach(function (item) {
+                                if (typeof item._friend !== "undefined") {
+                                    UserService
+                                        .findUserById(item._friend)
+                                        .then(function (obj) {
+
+                                            item.username = obj.data.username
+
+                                        }, function (err) {
+                                            console.log(err)
+                                        })
+                                }
+
+                                HackerNewsService
+                                    .item(item.post)
+                                    .then(function (obj) {
+
+                                        item.url = obj.url
+                                        item.title = obj.title
+
+                                    }, function (err) {
+                                        console.log(err)
+                                    })
+                            })
+                        }, function(err) {
+                            console.log(err)
+                        })
+                }, function(err) {
+                    console.log(err)
                 })
         }
 

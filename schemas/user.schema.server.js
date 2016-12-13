@@ -3,7 +3,8 @@ module.exports = function(mongoose, utils) {
     var schema = mongoose.Schema({
 
         username: {type: String, required: [true, "No username entered"], trim: true, lowercase: true, unique: true},
-        password: {type: String, required: [true, "No password entered"]},
+        profile: {type: String, unique: true},
+        password: {type: String},
         email: {type: String, trim: true, lowercase: true},
         firstName: {type: String, trim: true},
         lastName: {type: String, trim: true},

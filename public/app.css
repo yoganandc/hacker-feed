@@ -108,8 +108,20 @@ a {
     margin-top: 20px;
 }
 
+.table-details {
+    margin-top: 30px;
+}
+
 .list-p {
     margin-bottom: 0px;
+}
+
+.last-header {
+    border-bottom: 1px solid #ddd;
+}
+
+.f-request {
+    padding-top: 20px;
 }
 
 #login-panel {
@@ -133,4 +145,18 @@ a {
 
 #search-panel {
     padding-top: 20px;
+}
+
+#user-panel {
+    padding-top: 20px;
+}
+
+#f-message {
+    margin-top: 20px;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+#f-details {
+    padding-left: 0px;
 }
