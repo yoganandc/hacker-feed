@@ -160,7 +160,7 @@ module.exports = function (model, ItemModel, utils, q) {
             }
             else {
 
-
+                deferred.reject("Unimplemented")
 
             }
         })
