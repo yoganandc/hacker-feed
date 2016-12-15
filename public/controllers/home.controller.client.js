@@ -186,9 +186,10 @@
         init()
     }
 
-    function BoardController($rootScope, UserService, ItemService, HackerNewsService) {
+    function BoardController($rootScope, $timeout, UserService, ItemService, HackerNewsService) {
         var vm = this
         vm.refresh = refresh
+        vm.deleteItem = deleteItem
 
         function init() {
             if(typeof $rootScope.boardItems === "undefined") {
@@ -200,6 +201,9 @@
         }
 
         function refresh() {
+            delete vm.error
+            delete vm.message
+
             UserService
                 .loggedIn()
                 .then(function(obj) {
@@ -242,6 +246,36 @@
                         })
                 }, function(err) {
 
+                })
+        }
+
+        function deleteItem(itemId) {
+            delete vm.error
+            delete vm.message
+
+            ItemService
+                .deleteItem(vm.user._id, itemId)
+                .then(function(obj) {
+
+                    var index = -1
+                    for(var i = 0; i < vm.items.length; i++) {
+                        if(vm.items[i]._id === itemId) {
+                            index = i
+                            break
+                        }
+                    }
+
+                    vm.items.splice(index, 1)
+                    vm.message = "Deleted successfully!"
+                    $timeout(function() {
+                        delete vm.message
+                    }, 10000)
+
+                }, function (err) {
+                    vm.error = err.data.message
+                    $timeout(function() {
+                        delete vm.error
+                    }, 10000)
                 })
         }
 

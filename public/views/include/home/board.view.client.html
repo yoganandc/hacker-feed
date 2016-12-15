@@ -1,6 +1,12 @@
 <div ng-controller="BoardController as child4">
     <p ng-if="child4.items.length === 0" class="bg-success message">Click on any of the other three tabs above to begin saving and sharing posts!</p>
 
+    <p ng-if="child4.message" class="bg-success message">{{child4.message}}</p>
+
+    <div ng-show="child4.error" class="alert alert-danger">
+        {{child4.error}}
+    </div>
+
     <div class="list-panel">
         <div ng-if="child4.items.length > 0">
             <div ng-repeat="item in child4.items | orderBy:'$index':true">
@@ -11,6 +17,7 @@
                     <p ng-if="!item.username" class="list-p">
                         <strong>You</strong> saved a post:
                     </p>
+                    <a class="action-link" href ng-click="child4.deleteItem(item._id)"><i class="fa fa-trash fa-lg fa-pull-right action"></i></a>
                     <a class="action-link" href="#/comments/{{item.post}}"><i class="fa fa-comments fa-lg fa-pull-right action"></i></a>
                     <a href="{{item.url}}" target="_blank">{{item.title}}</a>
                 </div>

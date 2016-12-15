@@ -10,7 +10,7 @@ module.exports = function(app, mongoose, passport) {
     var UserMongooseModel = mongoose.model("User", UserSchema)
     var ItemMongooseModel = mongoose.model("Item", ItemSchema)
 
-    var UserModel = require("./models/user.model.server.js")(UserMongooseModel, utils, q)
+    var UserModel = require("./models/user.model.server.js")(UserMongooseModel, ItemMongooseModel, utils, q)
     var ItemModel = require("./models/item.model.server.js")(ItemMongooseModel, UserMongooseModel, utils, q)
 
     require("./services/user.service.server.js")(app, passport, UserModel, utils, ObjectId)

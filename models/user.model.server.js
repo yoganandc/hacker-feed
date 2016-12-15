@@ -1,6 +1,6 @@
 var bcrypt = require("bcrypt-nodejs")
 
-module.exports = function (model, utils, q) {
+module.exports = function (model, ItemModel, utils, q) {
 
     function createUser(user) {
         var deferred = q.defer()
@@ -151,7 +151,19 @@ module.exports = function (model, utils, q) {
     function deleteUser(userId) {
         var deferred = q.defer()
 
-        deferred.reject("Unimplemented")
+        model.findById(userId, function(err, res) {
+            if(err) {
+                deferred.reject(err)
+            }
+            else if(!res) {
+                deferred.reject("No user with given ID found")
+            }
+            else {
+
+
+
+            }
+        })
 
         return deferred.promise
     }

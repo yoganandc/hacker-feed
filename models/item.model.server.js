@@ -100,7 +100,7 @@ module.exports = function(model, UserModel, utils, q) {
                             deferred.reject(err)
                         }
                         else {
-                            res2._user.items.splice(res2.indexOf(itemId), 1)
+                            res2._user.items.splice(res2._user.items.indexOf(itemId), 1)
 
                             res2._user.save(function(err, res3) {
                                 if(err) {
