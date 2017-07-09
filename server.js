@@ -1,5 +1,5 @@
-if(!process.env.APP_PORT) {
-    throw new Error("port not set in environment")
+if(!process.env.KEY_PATH || !process.env.CERT_PATH) {
+    throw new Error("key and cert paths not set in environment")
 }
 
 if(!process.env.MLAB_USERNAME || !process.env.MLAB_PASSWORD) {
@@ -25,6 +25,13 @@ db.once("open", function() {
     var express = require('express')
     var app = express()
 
+    app.all("*", function(req, res, next) {
+        if(req.secure) {
+            return next();
+        }
+        res.redirect('https://' + req.hostname + req.url)
+    })
+
     var bodyParser = require('body-parser')
     app.use(bodyParser.json())
     app.use(bodyParser.urlencoded({extended: true}))
@@ -49,7 +56,15 @@ db.once("open", function() {
         res.status(400).send({message: "Error"})
     })
 
-    app.listen(process.env.APP_PORT)
-    console.log("server started successfully")
+    app.listen(80)
 
+    var fs = require('fs')
+    var https = require('https')
+
+    https.createServer({
+        key: fs.readFileSync(process.env.KEY_PATH),
+        cert: fs.readFileSync(process.env.CERT_PATH)
+    }, app).listen(443)
+
+    console.log("server started successfully")
 })
